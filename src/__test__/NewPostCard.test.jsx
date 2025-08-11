@@ -30,18 +30,18 @@ describe("NewPostCard", () => {
 
   it("renders input fields and buttons", () => {
     renderWithRouter(<NewPostCard onDraftAdded={onDraftAddedMock} />);
-    expect(screen.getByPlaceholderText("Suggest a name for this Text")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Add your post's contents here")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Suggest Title Text")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Add Post Contents")).toBeInTheDocument();
     expect(screen.getByText("Save as Draft")).toBeInTheDocument();
     expect(screen.getByText("Post")).toBeInTheDocument();
   });
 
   it("allows entering title and content", () => {
     renderWithRouter(<NewPostCard onDraftAdded={onDraftAddedMock} />);
-    fireEvent.change(screen.getByPlaceholderText("Suggest a name for this Text"), {
+    fireEvent.change(screen.getByPlaceholderText("Suggest Title Text"), {
       target: { value: "Test Title" },
     });
-    fireEvent.change(screen.getByPlaceholderText("Add your post's contents here"), {
+    fireEvent.change(screen.getByPlaceholderText("Add Post Contents"), {
       target: { value: "Test Content" },
     });
 
@@ -51,7 +51,7 @@ describe("NewPostCard", () => {
 
   it("toggles tag selection up to 2", () => {
     renderWithRouter(<NewPostCard onDraftAdded={onDraftAddedMock} />);
-    const tags = screen.getAllByText(/Disability|Care|Support|Health|Clinics/i);
+    const tags = screen.getAllByText(/Tag[2-9]/i);
     fireEvent.click(tags[0]);
     fireEvent.click(tags[1]);
     fireEvent.click(tags[2]); // Should be ignored (limit 2)
@@ -78,6 +78,17 @@ describe("NewPostCard", () => {
 
   it("calls fetch with draft=false when 'Post' is clicked", async () => {
     renderWithRouter(<NewPostCard onDraftAdded={onDraftAddedMock} />);
+
+    // Fill in required fields with proper validation lengths
+    fireEvent.change(screen.getByPlaceholderText("Suggest Title Text"), {
+      target: { value: "Test Title for Validation" }, // >5 characters
+    });
+    fireEvent.change(screen.getByPlaceholderText("Add Post Contents"), {
+      target: { value: "This is a test content that has more than 20 characters to meet validation requirements" }, // >20 characters
+    });
+
+    // Select a tag (required for post submission)
+    fireEvent.click(screen.getByText("Tag2"));
 
     fireEvent.click(screen.getByText("Post"));
 

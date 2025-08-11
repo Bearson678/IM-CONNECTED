@@ -51,8 +51,8 @@ describe('UserInfoCard Component', () => {
         it('should render user information in view mode', () => {
             render(<UserInfoCard {...defaultProps} />);
             
-            expect(screen.getByText('Name:')).toBeInTheDocument();
-            expect(screen.getByText('Username:')).toBeInTheDocument();
+            expect(screen.getByText('Name')).toBeInTheDocument();
+            expect(screen.getByText('Username')).toBeInTheDocument();
             expect(screen.getByText('Email Address:')).toBeInTheDocument();
             expect(screen.getByText('Phone Number:')).toBeInTheDocument();
             
@@ -88,8 +88,8 @@ describe('UserInfoCard Component', () => {
             
             render(<UserInfoCard {...defaultProps} user={emptyUser} />);
             
-            expect(screen.getByText('Name:')).toBeInTheDocument();
-            expect(screen.getByText('Username:')).toBeInTheDocument();
+            expect(screen.getByText('Name')).toBeInTheDocument();
+            expect(screen.getByText('Username')).toBeInTheDocument();
             expect(screen.getByText('Email Address:')).toBeInTheDocument();
             expect(screen.getByText('Phone Number:')).toBeInTheDocument();
         });
@@ -103,7 +103,7 @@ describe('UserInfoCard Component', () => {
             render(<UserInfoCard {...defaultProps} user={partialUser} />);
             
             expect(screen.getByText('John Doe')).toBeInTheDocument();
-            expect(screen.getByText('Name:')).toBeInTheDocument();
+            expect(screen.getByText('Name')).toBeInTheDocument();
         });
     });
 
@@ -116,8 +116,8 @@ describe('UserInfoCard Component', () => {
         it('should render input fields in edit mode', () => {
             render(<UserInfoCard {...editProps} />);
             
-            expect(screen.getByLabelText('Name:')).toBeInTheDocument();
-            expect(screen.getByLabelText('Username:')).toBeInTheDocument();
+            expect(screen.getByLabelText('Name')).toBeInTheDocument();
+            expect(screen.getByLabelText('Username')).toBeInTheDocument();
             expect(screen.getByLabelText('Email Address:')).toBeInTheDocument();
             expect(screen.getByLabelText('Phone Number:')).toBeInTheDocument();
         });
@@ -142,7 +142,7 @@ describe('UserInfoCard Component', () => {
         it('should call onChange when input values change', () => {
             render(<UserInfoCard {...editProps} />);
             
-            const nameInput = screen.getByLabelText('Name:');
+            const nameInput = screen.getByLabelText('Name');
             fireEvent.change(nameInput, { target: { name: 'name', value: 'Jane Doe' } });
             
             expect(defaultProps.onChange).toHaveBeenCalledTimes(1);
@@ -200,8 +200,8 @@ describe('UserInfoCard Component', () => {
             
             render(<UserInfoCard {...editProps} user={emptyUser} />);
             
-            const nameInput = screen.getByLabelText('Name:');
-            const usernameInput = screen.getByLabelText('Username:');
+            const nameInput = screen.getByLabelText('Name');
+            const usernameInput = screen.getByLabelText('Username');
             const emailInput = screen.getByLabelText('Email Address:');
             const phoneInput = screen.getByLabelText('Phone Number:');
             
@@ -226,8 +226,8 @@ describe('UserInfoCard Component', () => {
             render(<UserInfoCard {...editProps} />);
             
             const inputs = [
-                { label: 'Name:', name: 'name', value: 'New Name' },
-                { label: 'Username:', name: 'username', value: 'newusername' },
+                { label: 'Name', name: 'name', value: 'New Name' },
+                { label: 'Username', name: 'username', value: 'newusername' },
                 { label: 'Email Address:', name: 'email', value: 'new@email.com' },
                 { label: 'Phone Number:', name: 'number', value: '+9876543210' }
             ];
@@ -250,10 +250,10 @@ describe('UserInfoCard Component', () => {
         it('should apply correct CSS classes in view mode', () => {
             render(<UserInfoCard {...defaultProps} />);
             
-            const card = screen.getByText('Name:').closest('.user-card');
+            const card = screen.getByText('Name').closest('.user-card');
             expect(card).toBeInTheDocument();
             
-            const detailRows = screen.getAllByText(/Name:|Username:|Email Address:|Phone Number:/);
+            const detailRows = screen.getAllByText(/Name|Username|Email Address:|Phone Number:/);
             detailRows.forEach(row => {
                 expect(row.closest('.detail-row')).toBeInTheDocument();
             });
@@ -262,10 +262,10 @@ describe('UserInfoCard Component', () => {
         it('should apply correct CSS classes in edit mode', () => {
             render(<UserInfoCard {...defaultProps} isEditing={true} />);
             
-            const card = screen.getByLabelText('Name:').closest('.user-card');
+            const card = screen.getByLabelText('Name').closest('.user-card');
             expect(card).toBeInTheDocument();
             
-            const editModeRows = screen.getAllByLabelText(/Name:|Username:|Email Address:|Phone Number:/);
+            const editModeRows = screen.getAllByLabelText(/Name|Username|Email Address:|Phone Number:/);
             editModeRows.forEach(input => {
                 expect(input.closest('.edit-mode')).toBeInTheDocument();
             });

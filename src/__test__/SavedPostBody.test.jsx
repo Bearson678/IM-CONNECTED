@@ -90,7 +90,7 @@ describe("SavedPostBody", () => {
 
     renderWithRouter(<SavedPostBody />);
     await waitFor(() => {
-      expect(screen.getByText(/failed to fetch saved posts/i)).toBeInTheDocument();
+      expect(screen.getByText(/Error:/i)).toBeInTheDocument();
     });
   });
 });

@@ -17,7 +17,7 @@ describe("CommentBody component", () => {
   it("renders with no comments", () => {
     render(<CommentBody comments={[]} postId={mockPostId} refreshComments={mockRefresh} />);
     expect(screen.getByText("Add a Comment")).toBeInTheDocument();
-    expect(screen.getByText("No comments yet.")).toBeInTheDocument();
+    expect(screen.getByText("No Comments Yet")).toBeInTheDocument();
   });
 
   it("renders with comments", () => {
@@ -42,7 +42,7 @@ describe("CommentBody component", () => {
 
     render(<CommentBody comments={[]} postId={mockPostId} refreshComments={mockRefresh} />);
 
-    const textarea = screen.getByPlaceholderText("Write something...");
+    const textarea = screen.getByPlaceholderText("Write something");
     fireEvent.change(textarea, { target: { value: "Test comment" } });
 
     const postButton = screen.getByText("Post");

@@ -30,7 +30,7 @@ describe("MediaUploader", () => {
         onRemoveNewFile={onRemoveNewFile}
       />
     );
-    expect(screen.getByText(/Drag and drop media here/i)).toBeInTheDocument();
+    expect(screen.getByText("Add Media")).toBeInTheDocument();
   });
 
   it("renders existing media and calls removal callback", async () => {
@@ -93,7 +93,7 @@ describe("MediaUploader", () => {
     />
   );
 
-  const dropArea = screen.getByText(/Drag and drop media here/i);
+  const dropArea = screen.getByText("Add Media");
   const fileInput = container.querySelector('input[type="file"]');
 
   expect(fileInput).toBeInTheDocument();
@@ -139,7 +139,7 @@ describe("MediaUploader", () => {
       />
     );
 
-    const dropArea = screen.getByText(/Drag and drop media here/i);
+    const dropArea = screen.getByText("Add Media");
     const file = new File(["dummy"], "test.png", { type: "image/png" });
 
     fireEvent.drop(dropArea, {
