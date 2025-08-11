@@ -1,0 +1,12 @@
+filter,mode,sort,source
+default,default,latest,default
+tag1,mode1,asc,source1
+tag1,mode1,desc,source2
+tag1,mode1,,source3
+tag1,mode1,abc,source4
+tag1,mode1,latest,;DROP TABLE posts;
+"",,"",
+<tag1>,mode1,latest,default
+verylongtagnameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,mode1,latest,default
+Mental Disability,Big,latest,default
+Mental Disability,true,DROP TABLE posts,personalized
