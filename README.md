@@ -84,7 +84,7 @@ IM-CONNECTED is a project under 50.003 Elements of Software Construction. The go
 
 
 ### Splash Screen 
-MISSING PIC
+<img src="pictures\20.png">
 
 ### Login / Sign Up
 Users can login, sign up and change password for an account. An otp will be sent to their email account asking them for verification.
@@ -94,7 +94,7 @@ Users can login, sign up and change password for an account. An otp will be sent
 
 
 ### Preferences
-MISSING PIC
+<img src="pictures\21.png">
 
 ### Dashboard
 The main page providing an overview of our features.
@@ -123,14 +123,27 @@ Users can
 
 
 ## Testing
-
+Jest is used as the core testing suite for backend unit testing while Vitest and react-testing module are the test suites for frontend unit testing.
+For Integration testing, we've used the call-graph based integration testing to simulate real-case data flow and test serveral use cases to validate our code.
+Top-down orientation was choosen as the preferred way of testing due to the added benefit of fault separation and clear identification of which sections of the code are being tested.
+For End-to-End testing, Cypress is used to simulate use cases with the full integration of frontend and backend code as a collective.
+For Fuzzy testing, Apache JMeter is used to generate numerous test inputs and run our api calls indefinitely so as to identify unexpected vulnerabilities that we may have not spotted.
 ### Unit Testing
-
+To run a specific unit test from the backend, type `npm run test /name/of/test/file` in the terminal.
+To run all the tests from the frontend, type `npm run frondendtest` in the terminal.
 ### Integration Testing
+To run a specific integration test from the backend, type `npm run test /name/of/test/file` in the terminal.
+To run a set of integration tests from a specific use case from the backend, type `npm run test backendtest:forum/integration/usecasename` in the terminal.
 
 ### End-to-end Testing
+To load up Cypress, run `npm run cypress` in the terminal.
+Select your preferred browser to run the test on.
+Select your use case of choice.
 
 ### Fuzzy Testing
+Ensure that Apache JMeter is installed, and open `jmeter.bat` under apache-jmeter-5.6.3\bin.
+Under the JMeter GUI, open a file of the `.jmx` extension.
+Click the green play button to start running the test.
 
 
 

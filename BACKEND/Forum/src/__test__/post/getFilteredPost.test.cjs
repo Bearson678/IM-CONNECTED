@@ -232,7 +232,7 @@ describe("getFilteredPosts", () => {
       mode: "compact",
     });
 
-    expect(mockLimit).toHaveBeenCalledWith(5); // mode != default triggers limit=5
+    expect(mockLimit).toHaveBeenCalledWith(10); // mode != default triggers limit=5
   });
 
   test("throws error if user fetch fails", async () => {

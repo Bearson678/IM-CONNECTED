@@ -1,5 +1,6 @@
 describe('template spec', () => {
   it('passes', () => {
+    //visit the webapp
     cy.visit('http://localhost:5173/');
 
 
