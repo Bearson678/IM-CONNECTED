@@ -178,7 +178,7 @@ const getFilteredPosts = async ({ tags = [], sort = "latest", source = "default"
 
         console.log(filter)
 
-        let num = mode ==="default"? 10 : 5 //mode limiter
+        let num = mode ==="Big"? 5 : 10 //mode limiter
         console.log({ ...filter, draft: false })
         let posts = await Post.find({ ...filter, draft: false }).sort(sortOptions).limit(num);
         console.log(posts)

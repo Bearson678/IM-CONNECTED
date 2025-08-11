@@ -179,7 +179,7 @@ router.put(
 
       console.log("Parsed mediaToRemove:", mediaToRemove);
 
-      // 1. Map uploaded files to media objects
+      
       let newMedia = [];
       if (req.files && req.files.length > 0) {
         newMedia = req.files.map(file => ({
@@ -191,7 +191,7 @@ router.put(
         }));
       }
 
-      // 2. Remove old media from GCS
+    
       if (mediaToRemove.length > 0) {
         await Promise.all(
           mediaToRemove.map(async (publicId) => {
@@ -205,7 +205,7 @@ router.put(
         );
       }
 
-      // 3. Pass everything to service
+    
       const updatedDraft = await editDraft({
         postId,
         content,
