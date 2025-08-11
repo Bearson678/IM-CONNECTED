@@ -89,7 +89,7 @@ describe("LoginCard component", () => {
     );
 
     expect(mockSetUser).toHaveBeenCalledWith(mockUser);
-    expect(mockNavigate).toHaveBeenCalledWith("/forum");
+    expect(mockNavigate).toHaveBeenCalledWith("/dashboard");
   });
 
   test("displays error message when login fails", async () => {

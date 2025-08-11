@@ -87,7 +87,7 @@ describe("MyPostBody", () => {
 
     renderWithRouter(<MyPostBody />);
     await waitFor(() =>
-      expect(screen.getByText(/You haven’t posted anything yet/i)).toBeInTheDocument()
+     expect(screen.getByText(/You haven't posted anything yet/i)).toBeInTheDocument()
     );
   });
 
@@ -182,7 +182,7 @@ describe("MyPostBody", () => {
 
     renderWithRouter(<MyPostBody />);
     await waitFor(() =>
-      expect(screen.getByText(/You haven’t posted anything yet/i)).toBeInTheDocument()
+      expect(screen.getByText(/You haven't posted anything yet/i)).toBeInTheDocument()
     );
 
     screen.getByText("MockFilter").click();

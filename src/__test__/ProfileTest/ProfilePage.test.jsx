@@ -74,8 +74,11 @@ vi.mock('react-i18next', () => ({
 }));
 
 vi.mock('i18next', () => ({
-    changeLanguage: vi.fn()
+  default: {
+    changeLanguage: vi.fn(),
+  }
 }));
+
 
 vi.mock('../../Profile/TextSize', () => ({
     applyTextSize: vi.fn()
