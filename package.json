@@ -16,6 +16,11 @@
     "backendtest:forum/integration/UC1": "cross-env NODE_ENV=test dotenv_config_path=BACKEND/Forum/src/__test__/integration_test/.env.test jest BACKEND/Forum/src/__test__/integration_test/UC1 --runInBand",
     "backendtest:forum/integration/UC2": "cross-env NODE_ENV=test dotenv_config_path=BACKEND/Forum/src/__test__/integration_test/.env.test jest BACKEND/Forum/src/__test__/integration_test/UC2 --runInBand",
     "frontendtest": "vitest src",
+    "fuzz:test": "node scripts/fuzzTest.js",
+    "fuzz:test:login": "node scripts/fuzzTest.js --scenario=login",
+    "fuzz:test:preferences": "node scripts/fuzzTest.js --scenario=preferences",
+    "fuzz:test:verbose": "node scripts/fuzzTest.js --verbose",
+
     "build": "vite build",
     "build:pages": "NODE_ENV=production vite build",
     "build:vercel": "npm install --prefix BACKEND/Forum && npm install --prefix BACKEND/Scanner && npm install --prefix BACKEND/AI_chatbot/src && npm run build",
