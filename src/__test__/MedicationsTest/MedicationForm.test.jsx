@@ -20,7 +20,7 @@ vi.mock('../../Medications/services/medicationScannerService', () => ({
     checkApiHealth: vi.fn(() => Promise.resolve(true)),
     scanMedicationImage: vi.fn(() => Promise.resolve({ 
         name: 'Scanned Med',
-        usedFor: 'Scanned condition',
+        usedTo: 'Scanned condition',
         sideEffects: 'Scanned side effects'
     })),
     formatMedicationData: vi.fn((data) => data),

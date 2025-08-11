@@ -95,7 +95,7 @@ function MyPostBody() {
         {loading ? (
           <p>{"Loading..."}</p>
         ) : error ? (
-          <p>{t("Error: {error}")}</p>
+          <p>{t(`Error: ${error}`)}</p>
         ) : myPosts.length > 0 ? (
           myPosts.map((post) => (
             <ForumCard

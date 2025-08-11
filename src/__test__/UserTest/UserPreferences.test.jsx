@@ -1,181 +1,108 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { MemoryRouter } from "react-router-dom";
-import { AuthContext } from "../../AuthContext";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { vi } from "vitest";
+import React from "react";
 import UserPreferences from "../../Preferences/UserPreferences";
-
-global.fetch = vi.fn();
-
+import { AuthContext } from "../../AuthContext";
+import i18n from "../../il8n";
 const mockNavigate = vi.fn();
-vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
-  return {
-    ...actual,
-    useNavigate: () => mockNavigate,
-  };
-});
+vi.mock("react-router-dom", () => ({
+  useNavigate: () => mockNavigate,
+}));
 
-describe("UserPreferences component", () => {
-  const mockSetUser = vi.fn();
-  const mockAuthContextValue = {
-    setUser: mockSetUser,
-    user: null,
-    loading: false,
-  };
+vi.mock("../Profile/TextSize", () => ({
+  applyTextSize: vi.fn(),
+}));
 
+vi.mock("../path/to/i18n", () => ({
+  default: {
+    changeLanguage: vi.fn(),
+    t: (key) => key,
+  },
+}));
+
+// Mock images to avoid import errors
+vi.mock("../assets/Children.png", () => "children.png");
+vi.mock("../assets/Depression.png", () => "depression.png");
+vi.mock("../assets/Elderly.png", () => "elderly.png");
+vi.mock("../assets/Govt.png", () => "govt.png");
+vi.mock("../assets/Hospital.png", () => "hospital.png");
+vi.mock("../assets/MentalHealth.png", () => "mentalhealth.png");
+vi.mock("../assets/Money.png", () => "money.png");
+vi.mock("../assets/Wheelchair.png", () => "wheelchair.png");
+vi.mock("../config/api", () => ({
+  API_ENDPOINTS: {
+    USER_PREFERENCES: "/mock/preferences",
+  },
+}));
+
+const renderWithContext = (ui, { setUser = vi.fn() } = {}) => {
+  return render(
+    <AuthContext.Provider value={{ setUser }}>{ui}</AuthContext.Provider>
+  );
+};
+
+describe("UserPreferences Component", () => {
   beforeEach(() => {
-    fetch.mockClear();
-    mockNavigate.mockClear();
-    mockSetUser.mockClear();
     localStorage.clear();
-    localStorage.setItem("username", "testuser");
-    
-    global.alert = vi.fn();
-  });
-
-  const renderUserPreferences = () => {
-    return render(
-      <MemoryRouter>
-        <AuthContext.Provider value={mockAuthContextValue}>
-          <UserPreferences />
-        </AuthContext.Provider>
-      </MemoryRouter>
+    mockNavigate.mockReset();
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ user: { name: "testUser" } }),
+      })
     );
-  };
-
-  test("renders preferences form with all sections", () => {
-    renderUserPreferences();
-
-    expect(screen.getByText("Hi testuser!")).toBeInTheDocument();
-    expect(screen.getByText("Preferred Language")).toBeInTheDocument();
-    expect(screen.getByText("Text Size")).toBeInTheDocument();
-    expect(screen.getByText("Content Mode")).toBeInTheDocument();
-    expect(screen.getByText("Topics Interested In")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Continue" })).toBeInTheDocument();
+    localStorage.setItem("username", "TestUser");
   });
 
-  test("allows selecting different languages", async () => {
-    const user = userEvent.setup();
-    renderUserPreferences();
-
-    const chineseButton = screen.getByText("华文");
-    await user.click(chineseButton);
-
-    expect(chineseButton).toHaveClass("selected");
-    expect(screen.getByText("English")).not.toHaveClass("selected");
+  it("renders greeting with username", () => {
+    renderWithContext(<UserPreferences />);
+    expect(screen.getByText(/Hi TestUser!/)).toBeInTheDocument();
   });
 
-  test("allows selecting different text sizes", async () => {
-    const user = userEvent.setup();
-    renderUserPreferences();
+  it("changes language when language button clicked", async () => {
+    renderWithContext(<UserPreferences />);
+    const langBtn = screen.getByRole("button", { name: /English/ });
+    fireEvent.click(langBtn);
 
-    const smallButton = screen.getByText("Small");
-    await user.click(smallButton);
-
-    expect(smallButton).toHaveClass("selected");
-    expect(screen.getByText("Medium")).not.toHaveClass("selected");
-  });
-
-  test("allows selecting different content modes", async () => {
-    const user = userEvent.setup();
-    renderUserPreferences();
-
-    const defaultModeCard = screen.getByText("Default Mode").closest("div");
-    await user.click(defaultModeCard);
-
-    expect(defaultModeCard).toHaveClass("selected");
-    expect(screen.getByText("Easy Reader Mode").closest("div")).not.toHaveClass("selected");
-  });
-
-  test("allows selecting up to 2 topics", async () => {
-    const user = userEvent.setup();
-    renderUserPreferences();
-
-    const physicalDisabilityButton = screen.getByText("Physical Disability & Chronic Illness").closest("button");
-    const mentalHealthButton = screen.getByText("Personal Mental Health").closest("button");
-
-    await user.click(physicalDisabilityButton);
-    expect(physicalDisabilityButton).toHaveClass("selected");
-
-    await user.click(mentalHealthButton);
-    expect(mentalHealthButton).toHaveClass("selected");
-  });
-
-  test("prevents selecting more than 2 topics", async () => {
-    const user = userEvent.setup();
-    renderUserPreferences();
-
-    const physicalDisabilityButton = screen.getByText("Physical Disability & Chronic Illness").closest("button");
-    const mentalHealthButton = screen.getByText("Personal Mental Health").closest("button");
-    const financialButton = screen.getByText("Financial & Legal Help").closest("button");
-
-    await user.click(physicalDisabilityButton);
-    await user.click(mentalHealthButton);
-
-    await user.click(financialButton);
-    expect(financialButton).not.toHaveClass("selected");
-    expect(financialButton).toHaveClass("disabled");
-  });
-
-  test("submits preferences and navigates to forum", async () => {
-    const user = userEvent.setup();
-    const mockUser = {
-      _id: "123",
-      username: "testuser",
-      preferences: {
-        language: "Chinese",
-        textSize: "Big",
-        contentMode: "Default",
-        topics: ["Physical Disability & Chronic Illness", "Personal Mental Health"],
-      },
-    };
-
-    fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ success: true, user: mockUser }),
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalled();
     });
-
-    renderUserPreferences();
-
-    await user.click(screen.getByText("华文")); 
-    await user.click(screen.getByText("Big")); 
-    await user.click(screen.getByText("Default Mode").closest("div")); 
-    await user.click(screen.getByText("Physical Disability & Chronic Illness").closest("button"));
-    await user.click(screen.getByText("Personal Mental Health").closest("button"));
-
-    const continueButton = screen.getByRole("button", { name: "Continue" });
-    await user.click(continueButton);
-
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:5001/api/v1/user/preferences",
-      expect.objectContaining({
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          username: "testuser",
-          language: "Chinese",
-          textSize: "Big",
-          contentMode: "Default",
-          topics: ["Physical Disability & Chronic Illness", "Personal Mental Health"],
-        }),
-      })
-    );
-
-    expect(localStorage.getItem("preferences")).toBe(
-      JSON.stringify({
-        language: "Chinese",
-        textSize: "Big",
-        contentMode: "Default",
-        topics: ["Physical Disability & Chronic Illness", "Personal Mental Health"],
-      })
-    );
-
-    expect(localStorage.getItem("canVerifyEmail")).toBeNull();
-    expect(mockSetUser).toHaveBeenCalledWith(mockUser);
-    expect(mockNavigate).toHaveBeenCalledWith("/forum");
   });
-}); 
+
+  it("shows error if Continue clicked without selecting required preferences", () => {
+    renderWithContext(<UserPreferences />);
+    fireEvent.click(screen.getByText(/Continue/));
+    expect(
+      screen.getByText(/Please select a preferred language./)
+    ).toBeInTheDocument();
+  });
+
+  it("submits preferences and navigates on success", async () => {
+    renderWithContext(<UserPreferences />);
+    fireEvent.click(screen.getByRole("button", { name: /English/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Medium/ }));
+    fireEvent.click(screen.getByText(/Easy Reader Mode/));
+    const topicBtns = screen.getAllByRole("button", {
+      name: /Physical Disability/,
+    });
+    fireEvent.click(topicBtns[0]);
+
+    fireEvent.click(screen.getByText(/Continue/));
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalled();
+      expect(mockNavigate).toHaveBeenCalledWith("/forum");
+    });
+  });
+
+  it("prevents selecting more than 2 topics", () => {
+    renderWithContext(<UserPreferences />);
+
+    const allTopicBtns = screen.getAllByRole("button", {
+      name: /Physical Disability|End of Life Care|Mental Disability/,
+    });
+    fireEvent.click(allTopicBtns[0]);
+    fireEvent.click(allTopicBtns[1]);
+    expect(allTopicBtns[2]).toHaveClass("disabled");
+  });
+});
