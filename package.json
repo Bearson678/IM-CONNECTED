@@ -20,7 +20,6 @@
     "fuzz:test:login": "node scripts/fuzzTest.js --scenario=login",
     "fuzz:test:preferences": "node scripts/fuzzTest.js --scenario=preferences",
     "fuzz:test:verbose": "node scripts/fuzzTest.js --verbose",
-
     "build": "vite build",
     "build:pages": "NODE_ENV=production vite build",
     "build:vercel": "npm install --prefix BACKEND/Forum && npm install --prefix BACKEND/Scanner && npm install --prefix BACKEND/AI_chatbot/src && npm run build",

