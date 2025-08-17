@@ -1,5 +1,5 @@
 describe('chatbot use case', () => {
-  it('use case 7', () => {
+  it('use case 7: translate foreign text', () => {
     cy.visit('http://localhost:5173/');
     cy.get('[href="/login"] > .top-button').click();
     cy.get(':nth-child(2) > .form-input').clear('R');
@@ -13,7 +13,7 @@ describe('chatbot use case', () => {
     cy.get('.button > img').click();
   })
 
-  it('use case 6', function() {
+  it('use case 6: summarize post', function() {
     cy.visit('http://localhost:5173/');
     cy.get('[href="/login"] > .top-button').click();
     cy.get(':nth-child(2) > .form-input').clear('R');
